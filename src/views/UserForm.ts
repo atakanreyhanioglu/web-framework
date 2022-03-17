@@ -13,10 +13,17 @@ export class UserForm {
 
     eventsMap(): { [key: string]: () => void } {
         return {
-            'click:button': this.onButtonClick,
             'mouseenter:h1': this.onHeaderHover,
-            'click:.set-age': this.onSetAgeClick
+            'click:.set-age': this.onSetAgeClick,
+            'click:.set-name': this.onSetNameClick
         }
+    }
+
+    onSetNameClick = (): void => {
+        const input = this.parent.querySelector('input')
+        const name = input.value
+
+        this.model.set({ name })
     }
 
     onSetAgeClick = (): void => {
@@ -27,14 +34,6 @@ export class UserForm {
         console.log('h1 hovered')
     }
 
-    onButtonClick(): void {
-        const buttons = document.querySelectorAll('button')
-        buttons.forEach((button: HTMLButtonElement) => {
-            button.style.border = "2px solid";
-            button.style.backgroundColor = "#ffffff"
-        })
-    }
-
     template(): string {
         return `
         <div>
@@ -42,7 +41,7 @@ export class UserForm {
           <div>Username: ${this.model.get('name')}</div>
           <div>age: ${this.model.get('age')}</div>
           <input />
-          <button>Click me</button>
+          <button class="set-name">Change name</button>
           <button class="set-age">Set random age</button>
         </div>
         `
