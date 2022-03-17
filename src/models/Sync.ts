@@ -1,4 +1,5 @@
 import axios, {AxiosPromise} from "axios";
+
 interface HasId {
     id?: number
 }
