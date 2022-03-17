@@ -1,12 +1,26 @@
+import {User} from "../models/User";
+
 export class UserForm {
 
-    constructor(public parent: Element) {}
+    constructor(public parent: Element, public model: User) {
+        this.bindModel()
+    }
+    bindModel(): void {
+        this.model.on('change', () => {
+            this.render()
+        })
+    }
 
     eventsMap(): { [key: string]: () => void } {
         return {
             'click:button': this.onButtonClick,
-            'mouseenter:h1': this.onHeaderHover
+            'mouseenter:h1': this.onHeaderHover,
+            'click:.set-age': this.onSetAgeClick
         }
+    }
+
+    onSetAgeClick = (): void => {
+        this.model.setRandomAge()
     }
 
     onHeaderHover(): void {
@@ -14,15 +28,22 @@ export class UserForm {
     }
 
     onButtonClick(): void {
-        console.log('button clicked')
+        const buttons = document.querySelectorAll('button')
+        buttons.forEach((button: HTMLButtonElement) => {
+            button.style.border = "2px solid";
+            button.style.backgroundColor = "#ffffff"
+        })
     }
 
     template(): string {
         return `
         <div>
           <h1>User Form</h1>
+          <div>Username: ${this.model.get('name')}</div>
+          <div>age: ${this.model.get('age')}</div>
           <input />
           <button>Click me</button>
+          <button class="set-age">Set random age</button>
         </div>
         `
     }
@@ -40,6 +61,8 @@ export class UserForm {
     }
 
     render(): void {
+        this.parent.innerHTML = '';
+
         const templateElement = document.createElement('template')
         templateElement.innerHTML = this.template()
 
