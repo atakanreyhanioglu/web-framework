@@ -7,4 +7,3 @@ user.on('change', () => {
 })
 
 user.fetch()
-
