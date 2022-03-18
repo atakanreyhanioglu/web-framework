@@ -21,6 +21,7 @@ export abstract class View<T extends Model<K>, K> {
             this.render()
         })
     }
+    onRender(): void {}
 
     bindEvents(fragment: DocumentFragment): void {
         const eventsMap = this.eventsMap()
@@ -53,9 +54,10 @@ export abstract class View<T extends Model<K>, K> {
         templateElement.innerHTML = this.template()
 
         this.bindEvents(templateElement.content)
-
-        this.parent.append(templateElement.content)
         this.mapRegions(templateElement.content)
 
+        this.onRender()
+
+        this.parent.append(templateElement.content)
     }
 }
